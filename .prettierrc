@@ -1,0 +1,9 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "semi": true,
+  "bracketSpacing": true,
+  "function-whitespace": ["before", "after"],
+  "arrowParens": "avoid"
+}

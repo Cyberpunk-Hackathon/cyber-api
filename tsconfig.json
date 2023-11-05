@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    // "strict": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowUnusedLabels": false,
+    "strictPropertyInitialization": false,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "paths": {
+      "@/infrastructure*": ["./src/infrastructure*"],
+      "@/use-cases*": ["./src/use-cases*"],
+      "@/domain*": ["./src/domain*"]
+    }
+  }
+}
