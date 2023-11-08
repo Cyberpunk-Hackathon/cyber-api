@@ -2,10 +2,11 @@ import { IUserUseCases } from '@/use-cases/user/user.use-cases.interface';
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { CreateUserDto } from './create-user.dto';
 import { User } from '@/domain/models/user';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GenericFactory } from '@/infrastructure/mapper/generic.factory';
 
 @Controller('users')
+@ApiBearerAuth()
 @ApiTags('users')
 export class UsersController {
   constructor(

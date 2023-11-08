@@ -1,9 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module, Scope } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ControllersModule } from './infrastructure/controllers/controllers.module';
 import { classes } from '@automapper/classes';
 import { AutomapperModule } from '@automapper/nestjs';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD, Reflector } from '@nestjs/core';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { AuthGuard } from './infrastructure/common/guards/auth.guard';
 
 @Module({
   imports: [
@@ -17,12 +20,22 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         return { uri: configService.get('MONGO_URI') };
       },
     }),
-    ControllersModule,
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
+    ControllersModule,
+    JwtModule
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      scope: Scope.REQUEST,
+      useFactory: (jwtService: JwtService, reflector: Reflector) => {
+        return new AuthGuard(jwtService, reflector);
+      },
+      inject: [JwtService, Reflector],
+    },
+  ],
 })
 export class AppModule {}

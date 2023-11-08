@@ -16,6 +16,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('APIs')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -26,7 +27,7 @@ async function bootstrap() {
     },
   });
 
-  await app.listen(process.env.PORT || 3008);
+  await app.listen(process.env.PORT || 3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
