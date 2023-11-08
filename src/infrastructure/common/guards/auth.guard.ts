@@ -19,14 +19,8 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.get<boolean>('public', context.getClass());
-
     const request = context.switchToHttp().getRequest();
     const header = request.headers['authorization'];
-
-    if (isPublic) {
-      return true;
-    }
 
     if (!header) {
       this.throwUnauthorizedException();
@@ -43,7 +37,7 @@ export class AuthGuard implements CanActivate {
     interface JWT {
       header: Object;
       payload: {
-        tid: string;
+        jti: string;
       };
       signature: string;
     }
@@ -52,7 +46,7 @@ export class AuthGuard implements CanActivate {
       complete: true,
     }) as JWT;
 
-    if (!decodedToken?.payload?.tid) {
+    if (!decodedToken?.payload?.jti) {
       this.throwUnauthorizedException();
       return false;
     }
