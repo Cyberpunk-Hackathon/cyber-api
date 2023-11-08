@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { JwksClient } from 'jwks-rsa';
@@ -16,6 +17,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
+    private configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -60,7 +62,7 @@ export class AuthGuard implements CanActivate {
       if (publicKey.status === 'success' && publicKey.publicKey) {
         const options: JwtVerifyOptions = {
           publicKey: publicKey.publicKey,
-          audience: 'fDzoq4nmLW104gvzPBXL7PCIu7SvwwpK',
+          audience: this.configService.get<string>('CLIENT_ID'), // client id of the OAuth 3.L0 App
           issuer: `https://auth.atlassian.com`,
         };
 

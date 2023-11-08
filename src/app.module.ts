@@ -24,17 +24,21 @@ import { AuthGuard } from './infrastructure/common/guards/auth.guard';
       strategyInitializer: classes(),
     }),
     ControllersModule,
-    JwtModule
+    JwtModule,
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
       scope: Scope.REQUEST,
-      useFactory: (jwtService: JwtService, reflector: Reflector) => {
-        return new AuthGuard(jwtService, reflector);
+      useFactory: (
+        jwtService: JwtService,
+        reflector: Reflector,
+        configService: ConfigService,
+      ) => {
+        return new AuthGuard(jwtService, reflector, configService);
       },
-      inject: [JwtService, Reflector],
+      inject: [JwtService, Reflector, ConfigService],
     },
   ],
 })
