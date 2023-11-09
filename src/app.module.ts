@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthGuard } from './infrastructure/common/guards/auth.guard';
+import { CloudIdGuard } from './infrastructure/common/guards/cloud-id.guard';
 
 @Module({
   imports: [
@@ -39,6 +40,11 @@ import { AuthGuard } from './infrastructure/common/guards/auth.guard';
         return new AuthGuard(jwtService, reflector, configService);
       },
       inject: [JwtService, Reflector, ConfigService],
+    },
+    {
+      provide: APP_GUARD,
+      scope: Scope.REQUEST,
+      useClass: CloudIdGuard,
     },
   ],
 })
