@@ -4,16 +4,19 @@ import { CreateUserDto } from './create-user.dto';
 import { User } from '@/domain/models/user';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GenericFactory } from '@/infrastructure/mapper/generic.factory';
+import { ControllerBase } from '../base.controller';
 
 @Controller('users')
 @ApiBearerAuth()
 @ApiTags('users')
-export class UsersController {
+export class UsersController extends ControllerBase {
   constructor(
     @Inject('IUserUseCases')
     private readonly userUseCases: IUserUseCases,
     private readonly factory: GenericFactory,
-  ) {}
+  ) {
+    super();
+  }
 
   @Get()
   @ApiOperation({ summary: 'Get all users' })
