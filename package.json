@@ -24,6 +24,7 @@
     "@automapper/core": "^8.7.7",
     "@automapper/nestjs": "^8.7.7",
     "@automapper/types": "^6.3.1",
+    "@clerk/clerk-sdk-node": "^4.12.20",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
