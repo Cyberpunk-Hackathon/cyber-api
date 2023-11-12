@@ -9,6 +9,7 @@ import { UserMapperProfile } from './users/user.mapping.profile';
 import { UsersController } from './users/users.controller';
 import { IssuesController } from './issue/issue.controller';
 import { AuthController } from './auth/auth.controller';
+import { UploadController } from './upload/upload.controller';
 
 @Module({
   imports: [UseCasesModule, RepositoriesModule],
@@ -18,7 +19,8 @@ import { AuthController } from './auth/auth.controller';
     BoardsController,
     SprintsController,
     IssuesController,
-    AuthController
+    AuthController,
+    UploadController
   ],
 
   providers: [GenericFactory, UserMapperProfile],
