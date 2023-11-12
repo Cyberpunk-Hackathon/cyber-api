@@ -8,6 +8,7 @@ import { SprintsController } from './sprint/sprint.controller';
 import { UserMapperProfile } from './users/user.mapping.profile';
 import { UsersController } from './users/users.controller';
 import { IssuesController } from './issue/issue.controller';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [UseCasesModule, RepositoriesModule],
@@ -17,7 +18,9 @@ import { IssuesController } from './issue/issue.controller';
     BoardsController,
     SprintsController,
     IssuesController,
+    AuthController
   ],
+
   providers: [GenericFactory, UserMapperProfile],
 })
 export class ControllersModule {}

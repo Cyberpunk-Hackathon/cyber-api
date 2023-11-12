@@ -5,11 +5,23 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import axios from 'axios';
 
 @Injectable()
 export class CloudIdGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const metadata = this.reflector.getAllAndOverride<boolean>('isPublic', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (metadata) {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest();
     const header = request.headers['authorization'];
 

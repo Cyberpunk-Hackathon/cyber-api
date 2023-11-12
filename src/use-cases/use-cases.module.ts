@@ -2,11 +2,13 @@ import { AxiosModule } from '@/infrastructure/common/axios/axios.module';
 import { RepositoriesModule } from '@/infrastructure/repositories/repositories.module';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { AuthUseCases } from './auth/auth.use-cases';
 import { BoardUseCases } from './board/board.use-cases';
 import { IssueUseCases } from './issue/issue.use-cases';
 import { ProjectUseCases } from './project/project.use-cases';
 import { SprintUseCases } from './sprint/sprint.use-cases';
 import { UserUseCases } from './user/user.use-cases';
+
 
 @Module({
   imports: [RepositoriesModule, HttpModule, AxiosModule],
@@ -31,6 +33,10 @@ import { UserUseCases } from './user/user.use-cases';
       provide: 'IIssueUseCases',
       useClass: IssueUseCases,
     },
+     {
+      provide: 'IAuthUseCases',
+      useClass: AuthUseCases,
+    },
   ],
   exports: [
     'IUserUseCases',
@@ -38,6 +44,8 @@ import { UserUseCases } from './user/user.use-cases';
     'IBoardUseCases',
     'ISprintUseCases',
     'IIssueUseCases',
+    'IAuthUseCases'
   ],
+
 })
 export class UseCasesModule {}
