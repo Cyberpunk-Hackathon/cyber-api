@@ -1,13 +1,14 @@
-import { Module, Scope } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ControllersModule } from './infrastructure/controllers/controllers.module';
 import { classes } from '@automapper/classes';
 import { AutomapperModule } from '@automapper/nestjs';
+import { HttpModule } from '@nestjs/axios';
+import { Module, Scope } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AuthGuard } from './infrastructure/common/guards/auth.guard';
 import { CloudIdGuard } from './infrastructure/common/guards/cloud-id.guard';
+import { ControllersModule } from './infrastructure/controllers/controllers.module';
 
 @Module({
   imports: [
@@ -26,6 +27,12 @@ import { CloudIdGuard } from './infrastructure/common/guards/cloud-id.guard';
     }),
     ControllersModule,
     JwtModule,
+    HttpModule.registerAsync({
+      useFactory: () => ({
+        timeout: 5000,
+        maxRedirects: 5,
+      }),
+    }),
   ],
   controllers: [],
   providers: [
