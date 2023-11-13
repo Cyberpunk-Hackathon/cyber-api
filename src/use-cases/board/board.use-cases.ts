@@ -29,7 +29,7 @@ export class BoardUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestMany<Board>(
+    return await this.axiosService.axiosRequestManyAndMap<Board>(
       getBoardsByProjectsConfig,
       Board,
       'excludeAll',
@@ -50,7 +50,7 @@ export class BoardUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestOne<Board>(
+    return await this.axiosService.axiosRequestOneAndMap<Board>(
       getBoardByIdConfig,
       Board,
       'excludeAll',
