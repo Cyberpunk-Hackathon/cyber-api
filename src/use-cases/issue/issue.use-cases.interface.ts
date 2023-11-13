@@ -21,4 +21,17 @@ export interface IIssueUseCases extends IGenericUseCases<Issue> {
     accessToken: string,
     issueKey?: number | string,
   ): Promise<Issue>;
+  getIssueEstimationByIdFromJira(
+    cloudId: string,
+    accessToken: string,
+    boardId: number,
+    issueKey: number | string,
+  ): Promise<object>;
+  getBacklogIssuesByBoardIdFromJira(
+    cloudId: string,
+    accessToken: string,
+    boardId: number,
+    startAt?: number,
+    maxResults?: number,
+  ): Promise<ProcessedData<Issue>>;
 }

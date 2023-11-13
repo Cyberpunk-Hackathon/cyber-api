@@ -28,7 +28,7 @@ export class SprintUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestOne<Sprint>(
+    return await this.axiosService.axiosRequestOneAndMap<Sprint>(
       getSprintByIdConfig,
       Sprint,
       'excludeAll',
@@ -52,7 +52,7 @@ export class SprintUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestMany<Sprint>(
+    return await this.axiosService.axiosRequestManyAndMap<Sprint>(
       getAllSprintsByBoardIdConfig,
       Sprint,
       'excludeAll',

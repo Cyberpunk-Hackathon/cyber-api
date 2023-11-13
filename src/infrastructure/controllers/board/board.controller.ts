@@ -125,4 +125,34 @@ export class BoardsController extends ControllerBase {
       parsedMaxResults,
     );
   }
+  @Get(':boardId/backlog')
+  @ApiOperation({ summary: 'Get All Backlog Issues of a Board by Board Id' })
+  @ApiQuery({
+    name: 'startAt',
+    description: 'Start At',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'maxResults',
+    description: 'Max Results',
+    required: false,
+    type: Number,
+  })
+  async getBacklogIssuesByBoardId(
+    @Param('boardId', ParseIntPipe) boardId: number,
+    @Query('startAt') startAt: string,
+    @Query('maxResults') maxResults: string,
+    @Req() request: any,
+  ) {
+    const parsedStartAt = startAt ? parseInt(startAt, 10) : undefined;
+    const parsedMaxResults = maxResults ? parseInt(maxResults, 10) : undefined;
+    return await this.issueUseCases.getBacklogIssuesByBoardIdFromJira(
+      this.getCloudId(request),
+      this.getAccessToken(request),
+      boardId,
+      parsedStartAt,
+      parsedMaxResults,
+    );
+  }
 }

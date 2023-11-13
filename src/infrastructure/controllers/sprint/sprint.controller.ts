@@ -1,4 +1,3 @@
-import { GenericFactory } from '@/infrastructure/mapper/generic.factory';
 import { ISprintUseCases } from '@/use-cases/sprint/sprint.use-cases.interface';
 import {
   Controller,
@@ -6,12 +5,11 @@ import {
   Inject,
   Param,
   ParseIntPipe,
-  Query,
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ControllerBase } from '../base.controller';
-import { SprintState } from '@/domain/enums/sprint-state.enum';
+import { IIssueUseCases } from '@/use-cases/issue/issue.use-cases.interface';
 
 @Controller('sprint')
 @ApiBearerAuth()
@@ -20,6 +18,8 @@ export class SprintsController extends ControllerBase {
   constructor(
     @Inject('ISprintUseCases')
     private readonly sprintUseCases: ISprintUseCases,
+    @Inject('IIssueUseCases')
+    private readonly issueUseCases: IIssueUseCases,
   ) {
     super();
   }
@@ -31,6 +31,18 @@ export class SprintsController extends ControllerBase {
     @Req() request: any,
   ) {
     return await this.sprintUseCases.getSprintByIdFromJira(
+      this.getCloudId(request),
+      this.getAccessToken(request),
+      id,
+    );
+  }
+  @Get(':id/issues')
+  @ApiOperation({ summary: 'Get Sprint by Id' })
+  async getSprintIssuesById(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: any,
+  ) {
+    return await this.issueUseCases.getIssuesBySprintIdFromJira(
       this.getCloudId(request),
       this.getAccessToken(request),
       id,
