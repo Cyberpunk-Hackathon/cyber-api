@@ -13,7 +13,7 @@ import { ControllersModule } from './infrastructure/controllers/controllers.modu
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: 'env/.env.local',
+      envFilePath: '.env',
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
