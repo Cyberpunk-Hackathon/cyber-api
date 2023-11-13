@@ -8,7 +8,7 @@ import { IssueUseCases } from './issue/issue.use-cases';
 import { ProjectUseCases } from './project/project.use-cases';
 import { SprintUseCases } from './sprint/sprint.use-cases';
 import { UserUseCases } from './user/user.use-cases';
-
+import { UploadUseCases } from './upload/upload.use-cases';
 
 @Module({
   imports: [RepositoriesModule, HttpModule, AxiosModule],
@@ -33,9 +33,13 @@ import { UserUseCases } from './user/user.use-cases';
       provide: 'IIssueUseCases',
       useClass: IssueUseCases,
     },
-     {
+    {
       provide: 'IAuthUseCases',
       useClass: AuthUseCases,
+    },
+    {
+      provide: 'IUploadUseCases',
+      useClass: UploadUseCases,
     },
   ],
   exports: [
@@ -44,8 +48,8 @@ import { UserUseCases } from './user/user.use-cases';
     'IBoardUseCases',
     'ISprintUseCases',
     'IIssueUseCases',
-    'IAuthUseCases'
+    'IAuthUseCases',
+    'IUploadUseCases',
   ],
-
 })
 export class UseCasesModule {}
