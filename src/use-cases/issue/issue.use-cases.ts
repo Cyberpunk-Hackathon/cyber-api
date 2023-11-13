@@ -20,8 +20,10 @@ export class IssueUseCases
     startAt = 0,
     maxResults = 50,
   ): Promise<ProcessedData<Issue>> {
+    const fields =
+      'summary,description,priority,timeestimate,status,creator,timetracking,created';
     const getBoardsByProjectsConfig = {
-      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/board/${boardId}/backlog?jql=issuetype=Story${
+      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/board/${boardId}/backlog?fields=${fields}&jql=issuetype=Story${
         startAt !== null || undefined || isNaN(startAt)
           ? `&startAt=${startAt}`
           : ''
@@ -36,8 +38,6 @@ export class IssueUseCases
         Accept: 'application/json',
       },
     };
-
-    console.log(getBoardsByProjectsConfig.url);
 
     return await this.axiosService.axiosRequestManyAndMap<Issue>(
       getBoardsByProjectsConfig,
@@ -78,8 +78,10 @@ export class IssueUseCases
     accessToken: string,
     sprintId: number,
   ): Promise<ProcessedData<Issue>> {
+    const fields =
+      'summary,description,priority,timeestimate,status,creator,timetracking,created';
     const getBoardsByProjectsConfig = {
-      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/sprint/${sprintId}/issue?jql=issuetype=Story`,
+      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/sprint/${sprintId}/issue?fields=${fields}&jql=issuetype=Story`,
       method: 'GET',
       headers: {
         Authorization: accessToken,
@@ -101,7 +103,8 @@ export class IssueUseCases
     startAt = 0,
     maxResults = 50,
   ): Promise<ProcessedData<Issue>> {
-    const fields = 'priority,timeestimate,status,creator,timetracking,created';
+    const fields =
+      'summary,description,priority,timeestimate,status,creator,timetracking,created';
     const getBoardsByProjectsConfig = {
       url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/board/${boardId}/sprint/${sprintId}/issue?fields=${fields}&jql=issuetype=Story${
         startAt !== null || undefined || isNaN(startAt)
