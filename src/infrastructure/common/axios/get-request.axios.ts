@@ -9,7 +9,25 @@ import { firstValueFrom } from 'rxjs';
 export class AxiosGetService {
   constructor(private readonly httpService: HttpService) {}
 
-  async axiosRequestOne<T>(
+  async axiosRequestOne(config: AxiosRequestConfig): Promise<any> {
+    try {
+      const axiosResponse: AxiosResponse = await firstValueFrom(
+        this.httpService.request(config),
+      );
+
+      return axiosResponse.data;
+    } catch (error) {
+      if (error.isAxiosError) {
+        console.log(error);
+
+        return new ProcessedData(error.response?.status, error.message, 0, []);
+      }
+
+      throw error;
+    }
+  }
+
+  async axiosRequestOneAndMap<T>(
     config: AxiosRequestConfig,
     classType: new () => T,
     mappingStrategy: 'exposeAll' | 'excludeAll',
@@ -37,8 +55,22 @@ export class AxiosGetService {
       throw error;
     }
   }
+  async axiosRequestMany(config: AxiosRequestConfig): Promise<any> {
+    try {
+      const axiosResponse: AxiosResponse = await firstValueFrom(
+        this.httpService.request(config),
+      );
+      return axiosResponse;
+    } catch (error) {
+      if (error.isAxiosError) {
+        return new ProcessedData(error.response?.status, error.message, 0, []);
+      }
 
-  async axiosRequestMany<T>(
+      throw error;
+    }
+  }
+
+  async axiosRequestManyAndMap<T>(
     config: AxiosRequestConfig,
     classType: new () => T,
     mappingStrategy: 'exposeAll' | 'excludeAll',

@@ -33,7 +33,7 @@ export class ProjectUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestMany<Project>(
+    return await this.axiosService.axiosRequestManyAndMap<Project>(
       getAllProjectsConfig,
       Project,
       'excludeAll',

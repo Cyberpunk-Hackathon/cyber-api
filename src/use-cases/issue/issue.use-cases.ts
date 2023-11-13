@@ -13,38 +13,15 @@ export class IssueUseCases
   constructor(private readonly axiosService: AxiosGetService) {
     super();
   }
-  async getIssuesBySprintIdFromJira(
-    cloudId: string,
-    accessToken: string,
-    sprintId: number,
-  ): Promise<ProcessedData<Issue>> {
-    const getBoardsByProjectsConfig = {
-      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/sprint/${sprintId}/issue'
-      }`,
-      method: 'GET',
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-    };
-
-    return await this.axiosService.axiosRequestMany<Issue>(
-      getBoardsByProjectsConfig,
-      Issue,
-      'exposeAll',
-    );
-  }
-  async getBoardIssuesBySprintIdFromJira(
+  async getBacklogIssuesByBoardIdFromJira(
     cloudId: string,
     accessToken: string,
     boardId: number,
-    sprintId: number,
     startAt = 0,
     maxResults = 50,
   ): Promise<ProcessedData<Issue>> {
-    const fields = 'priority,timeestimate,status,creator,timetracking,created';
     const getBoardsByProjectsConfig = {
-      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/board/${boardId}/sprint/${sprintId}/issue?fields=${fields}${
+      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/board/${boardId}/backlog?jql=issuetype=Story${
         startAt !== null || undefined || isNaN(startAt)
           ? `&startAt=${startAt}`
           : ''
@@ -60,7 +37,89 @@ export class IssueUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestMany<Issue>(
+    console.log(getBoardsByProjectsConfig.url);
+
+    return await this.axiosService.axiosRequestManyAndMap<Issue>(
+      getBoardsByProjectsConfig,
+      Issue,
+      'exposeAll',
+    );
+  }
+
+  async getIssueEstimationByIdFromJira(
+    cloudId: string,
+    accessToken: string,
+    boardId: number,
+    issueKey: string | number,
+  ): Promise<Object> {
+    const getBoardsByProjectsConfig = {
+      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/issue/${issueKey}/estimation?boardId=${boardId}`,
+      method: 'GET',
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+    };
+
+    const estimation = await this.axiosService.axiosRequestOne(
+      getBoardsByProjectsConfig,
+    );
+
+    const responseBody = {
+      boardId,
+      issueKey,
+      estimation,
+    };
+
+    return responseBody;
+  }
+  async getIssuesBySprintIdFromJira(
+    cloudId: string,
+    accessToken: string,
+    sprintId: number,
+  ): Promise<ProcessedData<Issue>> {
+    const getBoardsByProjectsConfig = {
+      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/sprint/${sprintId}/issue?jql=issuetype=Story`,
+      method: 'GET',
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+    };
+
+    return await this.axiosService.axiosRequestManyAndMap<Issue>(
+      getBoardsByProjectsConfig,
+      Issue,
+      'exposeAll',
+    );
+  }
+  async getBoardIssuesBySprintIdFromJira(
+    cloudId: string,
+    accessToken: string,
+    boardId: number,
+    sprintId: number,
+    startAt = 0,
+    maxResults = 50,
+  ): Promise<ProcessedData<Issue>> {
+    const fields = 'priority,timeestimate,status,creator,timetracking,created';
+    const getBoardsByProjectsConfig = {
+      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/board/${boardId}/sprint/${sprintId}/issue?fields=${fields}&jql=issuetype=Story${
+        startAt !== null || undefined || isNaN(startAt)
+          ? `&startAt=${startAt}`
+          : ''
+      }${
+        maxResults !== null || undefined || isNaN(maxResults)
+          ? `&maxResults=${maxResults}`
+          : ''
+      }`,
+      method: 'GET',
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+    };
+
+    return await this.axiosService.axiosRequestManyAndMap<Issue>(
       getBoardsByProjectsConfig,
       Issue,
       'exposeAll',
@@ -80,7 +139,7 @@ export class IssueUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestOne<Issue>(
+    return await this.axiosService.axiosRequestOneAndMap<Issue>(
       getBoardByIdConfig,
       Issue,
       'exposeAll',
