@@ -9,6 +9,7 @@ import { ProjectUseCases } from './project/project.use-cases';
 import { SprintUseCases } from './sprint/sprint.use-cases';
 import { UserUseCases } from './user/user.use-cases';
 import { UploadUseCases } from './upload/upload.use-cases';
+import { PredictUseCases } from './predict/predict.use-cases';
 
 @Module({
   imports: [RepositoriesModule, HttpModule, AxiosModule],
@@ -41,6 +42,10 @@ import { UploadUseCases } from './upload/upload.use-cases';
       provide: 'IUploadUseCases',
       useClass: UploadUseCases,
     },
+    {
+      provide: 'IPredictUseCases',
+      useClass: PredictUseCases,
+    },
   ],
   exports: [
     'IUserUseCases',
@@ -50,6 +55,7 @@ import { UploadUseCases } from './upload/upload.use-cases';
     'IIssueUseCases',
     'IAuthUseCases',
     'IUploadUseCases',
+    'IPredictUseCases',
   ],
 })
 export class UseCasesModule {}

@@ -10,6 +10,8 @@ import { UsersController } from './users/users.controller';
 import { IssuesController } from './issue/issue.controller';
 import { AuthController } from './auth/auth.controller';
 import { UploadController } from './upload/upload.controller';
+import { PredictController } from './predict/predict.controller';
+import { PredictMapperProfile } from './predict/predict.mapping.profile';
 
 @Module({
   imports: [UseCasesModule, RepositoriesModule],
@@ -20,9 +22,10 @@ import { UploadController } from './upload/upload.controller';
     SprintsController,
     IssuesController,
     AuthController,
-    UploadController
+    UploadController,
+    PredictController,
   ],
 
-  providers: [GenericFactory, UserMapperProfile],
+  providers: [GenericFactory, UserMapperProfile, PredictMapperProfile],
 })
 export class ControllersModule {}
