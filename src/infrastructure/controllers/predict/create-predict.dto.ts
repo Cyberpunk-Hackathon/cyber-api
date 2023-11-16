@@ -29,4 +29,20 @@ export class CreatePredictDto {
     type: 'enum',
   })
   readonly complexity: ComplexityEnum;
+
+  @AutoMap()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Project Id',
+    example: '60d4a3a1f4a0f40015d9d7c2',
+  })
+  readonly projectId: string;
+
+  @AutoMap()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Sprint Id',
+    example: '60d4a3a1f4a0f40015d9d7c2',
+  })
+  readonly sprintId: string;
 }
