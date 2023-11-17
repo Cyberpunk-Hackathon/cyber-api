@@ -10,4 +10,10 @@ export class Predict {
 
   @AutoMap()
   readonly complexity: ComplexityEnum;
+
+  @AutoMap()
+  readonly projectId: string;
+
+  @AutoMap()
+  readonly sprintId: string;
 }
