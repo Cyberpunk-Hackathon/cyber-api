@@ -4,13 +4,19 @@ import { AxiosGetService } from '@/infrastructure/common/axios/get-request.axios
 import { Injectable } from '@nestjs/common';
 import { UseCaseBase } from '../use-case.abstract';
 import { IIssueUseCases } from './issue.use-cases.interface';
+import { AxiosPostService } from '@/infrastructure/common/axios/post-reqest.axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class IssueUseCases
   extends UseCaseBase<Issue>
   implements IIssueUseCases
 {
-  constructor(private readonly axiosService: AxiosGetService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly axiosGetService: AxiosGetService,
+    private readonly axiosPostService: AxiosPostService,
+  ) {
     super();
   }
   async getBacklogIssuesByBoardIdFromJira(
@@ -39,7 +45,7 @@ export class IssueUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestManyAndMap<Issue>(
+    return await this.axiosGetService.axiosRequestManyAndMap<Issue>(
       getBoardsByProjectsConfig,
       Issue,
       'exposeAll',
@@ -61,7 +67,7 @@ export class IssueUseCases
       },
     };
 
-    const estimation = await this.axiosService.axiosRequestOne(
+    const estimation = await this.axiosGetService.axiosRequestOne(
       getBoardsByProjectsConfig,
     );
 
@@ -89,7 +95,7 @@ export class IssueUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestManyAndMap<Issue>(
+    return await this.axiosGetService.axiosRequestManyAndMap<Issue>(
       getBoardsByProjectsConfig,
       Issue,
       'exposeAll',
@@ -122,7 +128,7 @@ export class IssueUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestManyAndMap<Issue>(
+    return await this.axiosGetService.axiosRequestManyAndMap<Issue>(
       getBoardsByProjectsConfig,
       Issue,
       'exposeAll',
@@ -133,20 +139,44 @@ export class IssueUseCases
     accessToken: string,
     issueIdOrKey?: string | number | undefined,
   ): Promise<Issue> {
-    const getBoardByIdConfig = {
-      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/issue/${issueIdOrKey}`,
-      method: 'GET',
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-    };
+    try {
+      const getBoardByIdConfig = {
+        url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/issue/${issueIdOrKey}`,
+        method: 'GET',
+        headers: {
+          Authorization: accessToken,
+          Accept: 'application/json',
+        },
+      };
+      const issue = await this.axiosGetService.axiosRequestOneAndMap<Issue>(
+        getBoardByIdConfig,
+        Issue,
+        'exposeAll',
+      );
 
-    return await this.axiosService.axiosRequestOneAndMap<Issue>(
-      getBoardByIdConfig,
-      Issue,
-      'exposeAll',
-    );
+      const similarStories: any[] = await this.getSimilarIssues(
+        issue.fields.summary,
+      );
+
+      issue.similarStories = similarStories && similarStories.length > 0 ? similarStories : [];
+      return issue;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private async getSimilarIssues(storyTitle: string): Promise<any[]> {
+    try {
+      const url = `${this.configService.getOrThrow('MODEL_BASE_URL')}/query`;
+      //'http://localhost:8000/api/query';
+      const similarIssues = await this.axiosPostService.post(url, {
+        query_text: storyTitle,
+      });
+
+      return similarIssues;
+    } catch (error) {
+      throw error;
+    }
   }
   create(createDto: Issue): Promise<Issue> {
     throw new Error('Method not implemented.');

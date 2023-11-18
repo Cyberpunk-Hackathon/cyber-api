@@ -24,15 +24,6 @@ export class CreatePredictDto {
   @AutoMap()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Complexity',
-    example: ComplexityEnum.High,
-    type: 'enum',
-  })
-  readonly complexity: ComplexityEnum;
-
-  @AutoMap()
-  @IsNotEmpty()
-  @ApiProperty({
     description: 'Project Id',
     example: '60d4a3a1f4a0f40015d9d7c2',
   })
@@ -45,4 +36,45 @@ export class CreatePredictDto {
     example: '60d4a3a1f4a0f40015d9d7c2',
   })
   readonly sprintId: string;
+
+  @AutoMap()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Issue Id',
+    example: '1',
+  })
+  readonly issueId: string;
+
+  @AutoMap()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Backend Technology',
+    example: 'NestJS',
+  })
+  readonly backendTechnology: string;
+
+  @AutoMap()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Frontend Technology',
+    example: 'ReactJS',
+  })
+  readonly frontendTechnology: string;
+
+  @AutoMap()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Complexity',
+    example: ComplexityEnum.High,
+    type: 'enum',
+  })
+  readonly complexity: ComplexityEnum;
+
+  @AutoMap()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Story point to hour ratio',
+    example: '1 : 4',
+  })
+  readonly storyPointToHourRatio: string;
 }

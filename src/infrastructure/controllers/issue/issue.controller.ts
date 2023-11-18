@@ -4,9 +4,8 @@ import {
   Get,
   Inject,
   Param,
-  ParseIntPipe,
   Query,
-  Req,
+  Req
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -45,6 +44,7 @@ export class IssuesController extends ControllerBase {
       issueIdOrKey,
     );
   }
+
   @Get(':issueIdOrKey/estimation')
   @ApiOperation({ summary: 'Get Issue Estimation by Id or Key with boardId' })
   @ApiParam({
@@ -69,4 +69,6 @@ export class IssuesController extends ControllerBase {
       issueIdOrKey,
     );
   }
+
+
 }

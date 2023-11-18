@@ -26,6 +26,6 @@ export class PredictController extends ControllerBase {
       CreatePredictDto,
       Predict,
     );
-    await this.predictUseCases.predict(predict);
+    return await this.predictUseCases.predict(predict);
   }
 }

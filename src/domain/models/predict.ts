@@ -9,11 +9,23 @@ export class Predict {
   readonly acceptanceCriteria: string;
 
   @AutoMap()
-  readonly complexity: ComplexityEnum;
-
-  @AutoMap()
   readonly projectId: string;
 
   @AutoMap()
   readonly sprintId: string;
+
+  @AutoMap()
+  readonly issueId: string;
+
+  @AutoMap()
+  readonly backendTechnology: string;
+
+  @AutoMap()
+  readonly frontendTechnology: string;
+
+  @AutoMap()
+  readonly complexity: ComplexityEnum;
+
+  @AutoMap()
+  readonly storyPointToHourRatio: string;
 }

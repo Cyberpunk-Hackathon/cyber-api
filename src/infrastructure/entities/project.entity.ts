@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type ProjectCostDocument = HydratedDocument<ProjectCostEntity>;
+export type ProjectCostDocument = HydratedDocument<ProjectEntity>;
 
 @Schema()
-export class ProjectCostEntity {
+export class ProjectEntity {
   @Prop()
   projectId: string;
 
@@ -15,4 +15,4 @@ export class ProjectCostEntity {
   currency: number;
 }
 
-export const ProjectCostSchema = SchemaFactory.createForClass(ProjectCostEntity);
+export const ProjectCostSchema = SchemaFactory.createForClass(ProjectEntity);
