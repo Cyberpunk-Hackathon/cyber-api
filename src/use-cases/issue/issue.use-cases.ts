@@ -133,8 +133,10 @@ export class IssueUseCases
     accessToken: string,
     issueIdOrKey?: string | number | undefined,
   ): Promise<Issue> {
+    const fields =
+      'summary,description,priority,timeestimate,status,creator,timetracking,created';
     const getBoardByIdConfig = {
-      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/issue/${issueIdOrKey}`,
+      url: `https://api.atlassian.com/ex/jira/${cloudId}/rest/agile/1.0/issue/${issueIdOrKey}?fields=${fields}&expand=renderedFields`,
       method: 'GET',
       headers: {
         Authorization: accessToken,
@@ -142,11 +144,15 @@ export class IssueUseCases
       },
     };
 
-    return await this.axiosService.axiosRequestOneAndMap<Issue>(
+    const response = await this.axiosService.axiosRequestOneAndMap<Issue>(
       getBoardByIdConfig,
       Issue,
       'exposeAll',
     );
+
+    response.fields.description = response.renderedFields.description;
+
+    return response
   }
   create(createDto: Issue): Promise<Issue> {
     throw new Error('Method not implemented.');

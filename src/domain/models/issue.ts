@@ -13,4 +13,8 @@ export class Issue {
   @AutoMap()
   @Expose()
   public fields: any;
+
+  @AutoMap()
+  @Expose()
+  renderedFields: any;
 }
